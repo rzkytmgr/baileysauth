@@ -1,0 +1,27 @@
+#!/bin/sh
+commit_message=$(cat "$1")
+
+prefix_regex="^(feat|fix|chore|docs|style|refactor|test|perf|ci)"
+suffix_regex="\([^)]+\): .+"
+
+if ! echo "$commit_message" | grep -Eq "$prefix_regex$suffix_regex"; then
+  printf "You must follow commit message rules! (e.g. feat(auth): add login)\033[0m\n\n"
+  exit 1
+fi
+
+commit_prefix=$(echo "$commit_message" | grep -oE "$prefix_regex")
+
+case "$commit_prefix" in
+  feat)     commit_emoji="🚀" ;;
+  fix)      commit_emoji="🐞" ;;
+  chore)    commit_emoji="🔧" ;;
+  docs)     commit_emoji="📝" ;;
+  style)    commit_emoji="💄" ;;
+  refactor) commit_emoji="♻️" ;;
+  test)     commit_emoji="✅" ;;
+  perf)     commit_emoji="⚡" ;;
+  ci)       commit_emoji="👷" ;;
+  *)        commit_emoji="🧩" ;;
+esac
+
+echo "$commit_emoji $commit_message" > "$1"
