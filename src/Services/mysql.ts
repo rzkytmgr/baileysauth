@@ -1,5 +1,6 @@
 import mysql from "mysql2/promise";
 import util from "@/Utils";
+import { constants } from "@/Lib/constants";
 import { ConnectionBase } from "@/Services/base";
 import type {
     BaileysAuthStateOptions,
@@ -15,7 +16,7 @@ class MySQLConnection extends ConnectionBase<BaileysAuthStateOptions> implements
     static async init(options: BaileysAuthStateOptions) {
         try {
             let connection: mysql.Connection,
-                tableName = "baileys_session";
+                tableName = constants.DEFAULT_STORE_NAME;
 
             if (typeof options === "string") {
                 connection = await mysql.createConnection(options);
@@ -58,8 +59,6 @@ class MySQLConnection extends ConnectionBase<BaileysAuthStateOptions> implements
             `SELECT value FROM \`${this.tableName}\` WHERE identifier = ? AND session = ?`,
             [identifier, this.sessionName],
         );
-
-        console.log(result);
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         return result.length > 0 ? JSON.parse(result[0].value, util.BufferReviver) : null;
@@ -68,6 +67,12 @@ class MySQLConnection extends ConnectionBase<BaileysAuthStateOptions> implements
     public async remove(identifier: string) {
         await this.connection.execute(`DELETE FROM \`${this.tableName}\` WHERE identifier = ? AND session = ?`, [
             identifier,
+            this.sessionName,
+        ]);
+    }
+
+    public async wipe() {
+        await this.connection.execute(`DELETE FROM \`${this.tableName}\` WHERE session = ?`, [
             this.sessionName,
         ]);
     }

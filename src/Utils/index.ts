@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* @ts-ignore */
 import * as libsignal from "libsignal";
+import base64 from "@protobufjs/base64";
 import { randomBytes } from "crypto";
 import type {
     AuthenticationCreds,
     BaileysAuthStateOptions,
     KeyPair,
-    Fingerprint,
     AppDataSync,
 } from "@/Types";
 
@@ -32,57 +32,6 @@ const BufferReviver = (_: any, value: any) => {
         return typeof val === "string" ? Buffer.from(val, "base64") : Buffer.from(val || []);
     }
     return value;
-};
-
-const allocate = (str: string) => {
-    let p = str.length;
-
-    if (!p) {
-        return new Uint8Array(1);
-    }
-
-    let n = 0;
-
-    while (--p % 4 > 1 && str.charAt(p) === "=") {
-        ++n;
-    }
-
-    return new Uint8Array(Math.ceil(str.length * 3) / 4 - n).fill(0);
-};
-
-const parseTimestamp = (timestamp: string | number | Long) => {
-    if (typeof timestamp === "string") {
-        return parseInt(timestamp, 10);
-    }
-
-    if (typeof timestamp === "number") {
-        return timestamp;
-    }
-
-    return timestamp;
-};
-
-export const fromObject = (args: AppDataSync) => {
-    const f: Fingerprint = {
-        ...args.fingerprint,
-        deviceIndexes: Array.isArray(args.fingerprint.deviceIndexes) ? args.fingerprint.deviceIndexes : [],
-    };
-
-    const message = {
-        keyData: Array.isArray(args.keyData) ? args.keyData : new Uint8Array(),
-        fingerprint: {
-            rawId: f.rawId || 0,
-            currentIndex: f.rawId || 0,
-            deviceIndexes: f.deviceIndexes,
-        },
-        timestamp: parseTimestamp(args.timestamp),
-    };
-
-    if (typeof args.keyData === "string") {
-        message.keyData = allocate(args.keyData);
-    }
-
-    return message;
 };
 
 const generateSignalPubKey = (pubKey: Uint8Array | Buffer) =>
@@ -132,4 +81,43 @@ const initializeAuthenticationCredentials = (): AuthenticationCreds => {
     };
 };
 
-export default { initializeAuthenticationCredentials, fromObject, BufferReplacer, BufferReviver, omit };
+const fromObject = (object: AppDataSync) => {
+    const message: AppDataSync = object || {};
+
+    if (object.keyData !== null) {
+        if (typeof object.keyData === "string") {
+            base64.decode(object.keyData, message.keyData = new Uint8Array(base64.length(object.keyData)), 0);
+        } else if (object.keyData.length >= 0) {
+            message.keyData = object.keyData;
+        }
+    }
+
+    if (object.fingerprint !== null && typeof object.fingerprint === "object") {
+        const fingerprint = object.fingerprint;
+        message.fingerprint = {
+            rawId: fingerprint.rawId ? fingerprint.rawId >>> 0 : null,
+            currentIndex: fingerprint.currentIndex ? fingerprint.currentIndex >>> 0 : null,
+            deviceIndexes: Array.isArray(fingerprint.deviceIndexes)
+                ? fingerprint.deviceIndexes.map((num) => num >>> 0)
+                : [],
+        };
+    }
+
+    if (object.timestamp !== null) {
+        if (typeof object.timestamp === "string") {
+            message.timestamp = parseInt(object.timestamp, 10);
+        } else {
+            message.timestamp = object.timestamp;
+        }
+    }
+
+    return message;
+};
+
+export default {
+    omit,
+    initializeAuthenticationCredentials,
+    BufferReplacer,
+    BufferReviver,
+    fromObject,
+};

@@ -1,8 +1,9 @@
+import { constants } from "@/Lib/constants";
 import { BaileysAuthStateOptions } from "@/Types";
 
 class ConnectionBase<T extends BaileysAuthStateOptions> {
-    protected sessionName: string = "baileys_session";
-    protected tableName: string = "baileys_session";
+    protected sessionName: string = constants.DEFAULT_SESSION_NAME;
+    protected tableName: string = constants.DEFAULT_STORE_NAME;
     protected isConnected: boolean = false;
 
     constructor(private options: T) {

@@ -19,17 +19,13 @@ const useBaileysAuthState = async (options: BaileysAuthStateOptions) => {
             keys: {
                 get: async (type: keyof SignalDataTypeMap, identifiers: string[]): Promise<any> => {
                     const data: Record<string, SignalDataTypeMap[typeof type]> = {};
-
-                    await Promise.all(
-                        identifiers.map(async (identifier) => {
-                            let value = await connection.read(`${type}_${identifier}`);
-                            if (type === "app-state-sync-key" && value) {
-                                value = util.fromObject(value);
-                            }
-                            data[identifier] = value;
-                        }),
-                    );
-
+                    for (const identifier of identifiers) {
+                        let value = await connection.read(`${type}_${identifier}`);
+                        if (type === "app-state-sync-key" && value) {
+                            value = util.fromObject(value);
+                        }
+                        data[identifier] = value;
+                    }
                     return data;
                 },
 
@@ -53,7 +49,8 @@ const useBaileysAuthState = async (options: BaileysAuthStateOptions) => {
                 },
             },
         },
-        saveCreds: async () => connection.store(creds, "creds"),
+        saveCreds: async () => await connection.store(creds, "creds"),
+        wipeCreds: async () => await connection.wipe(),
     };
 };
 

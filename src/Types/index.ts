@@ -11,6 +11,7 @@ export type IConnectionBase = {
     store: (data: any, identifier: string) => Promise<any>;
     remove: (identifier: string) => Promise<any>;
     read: (identifier: string) => Promise<any>;
+    wipe: () => Promise<any>;
 };
 
 export type ConnectionOptionsBase = {
@@ -27,12 +28,13 @@ export type BaileysAuthStateOptions =
     | ({ dialect: "pg"; } & ConnectionOptionsBase);
 
 export type Fingerprint = {
-    rawId: number;
-    currentIndex: number;
-    deviceIndexes: number[];
+    rawId: number | null;
+    currentIndex: number | null;
+    deviceIndexes: number[] | null;
 };
 
 export type AppDataSync = {
+    message: { rawId: number | null; };
     keyData: Uint8Array;
     fingerprint: Fingerprint;
     timestamp: Long | number;
