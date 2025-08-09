@@ -12,7 +12,7 @@ fi
 commit_prefix=$(echo "$commit_message" | grep -oE "$prefix_regex")
 
 case "$commit_prefix" in
-  feat)     commit_emoji="🚀" ;;
+  feat)     commit_emoji="🍻" ;;
   fix)      commit_emoji="🐞" ;;
   chore)    commit_emoji="🔧" ;;
   docs)     commit_emoji="📝" ;;
