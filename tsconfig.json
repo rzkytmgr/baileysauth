@@ -7,20 +7,13 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "resolveJsonModule": true,
-    "moduleResolution": "node",
-    "allowArbitraryExtensions": true,
-    "allowJs": true,
     "outDir": "./dist",
-    "removeComments": true,
     "newLine": "crlf",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitAny": true,
-    "skipLibCheck": true,
-    "noUnusedParameters": false,
-    "declaration": true
+    "noUnusedParameters": false
   },
   "exclude": [
     "node_modules",

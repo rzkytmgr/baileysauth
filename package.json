@@ -39,8 +39,9 @@
     "node": ">=20"
   },
   "dependencies": {
-    "long": "^5.3.2",
+    "@protobufjs/base64": "^1.1.2",
     "libsignal": "^2.0.1",
+    "long": "^5.3.2",
     "mysql2": "^3.14.3"
   }
 }

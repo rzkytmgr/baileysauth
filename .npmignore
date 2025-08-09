@@ -1,0 +1,14 @@
+# test directory
+test
+
+# husky directory
+.husky
+
+# vscode settings
+.vscode
+
+# packages/modules
+node_modules
+
+# source code
+src
