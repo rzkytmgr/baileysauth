@@ -1,3 +1,11 @@
+# packages/modules directory
 node_modules
+
+# distribution directory
 dist
+
+# environtment variable file
 .env
+
+# session directory
+.session
