@@ -1,0 +1,173 @@
+import Long from "long";
+import { ConnectionOptions } from "mysql2/promise";
+
+export type SessionDBResult = {
+    name: string;
+    session: string;
+    value: string;
+};
+
+export type IConnectionBase = {
+    store: (data: any, identifier: string) => Promise<any>;
+    remove: (identifier: string) => Promise<any>;
+    read: (identifier: string) => Promise<any>;
+};
+
+export type ConnectionOptionsBase = {
+    tableName?: string;
+    sessionName?: string;
+    database: string;
+};
+
+export type MySQLConnectionOptions = Partial<ConnectionOptions> & ConnectionOptionsBase;
+
+export type BaileysAuthStateOptions =
+    | string
+    | ({ dialect: "mysql"; } & MySQLConnectionOptions)
+    | ({ dialect: "pg"; } & ConnectionOptionsBase);
+
+export type Fingerprint = {
+    rawId: number;
+    currentIndex: number;
+    deviceIndexes: number[];
+};
+
+export type AppDataSync = {
+    keyData: Uint8Array;
+    fingerprint: Fingerprint;
+    timestamp: Long | number;
+};
+
+/** Baileys Types */
+export type AuthenticationState = {
+    creds: AuthenticationCreds;
+    keys: SignalKeyStore;
+};
+
+export type SignalCreds = {
+    readonly signedIdentityKey: KeyPair;
+    readonly signedPreKey: SignedKeyPair;
+    readonly registrationId: number;
+};
+
+export type KeyPair = {
+    public: Uint8Array;
+    private: Uint8Array;
+};
+
+export type SignedKeyPair = {
+    keyPair: KeyPair;
+    signature: Uint8Array;
+    keyId: number;
+    timestampS?: number;
+};
+
+export type ProtocolAddress = {
+    name: string;
+    deviceId: number;
+};
+
+export type SignalIdentity = {
+    identifier: ProtocolAddress;
+    identifierKey: Uint8Array;
+};
+
+export type IMeDetails = {
+    id: string;
+    lid?: string;
+    jid?: string;
+    name?: string;
+    notify?: string;
+    verifiedName?: string;
+    imgUrl?: string | null;
+    status?: string;
+};
+
+export type IAccount = {
+    details?: Uint8Array | null;
+    accountSignatureKey?: Uint8Array | null;
+    accountSignature?: Uint8Array | null;
+    deviceSignature?: Uint8Array | null;
+};
+
+export type IMessageKey = {
+    remoteJid?: string | null;
+    fromMe?: boolean | null;
+    id?: string | null;
+    participant?: string | null;
+};
+
+export type MinimalMessage = {
+    key: IMessageKey;
+    messageTimestamp?: number | Long | null;
+};
+
+export type AccountSettings = {
+    unarchiveChats: boolean;
+    defaultDisappearingMode?: IConversation;
+};
+
+export type IConversation = {
+    ephemeralExpiration?: number | null;
+    ephemeralSettingTimestamp?: number | Long | null;
+};
+
+export type AuthenticationCreds = SignalCreds & {
+    readonly noiseKey: KeyPair;
+    readonly pairingEphemeralKeyPair: KeyPair;
+    advSecretKey: string;
+    me?: IMeDetails;
+    account?: IAccount;
+    signalIdentities?: SignalIdentity[];
+    myAppStateKeyId?: string;
+    firstUnuploadedPreKeyId: number;
+    nextPreKeyId: number;
+    lastAccountSyncTimestamp?: number;
+    platform?: string;
+    processedHistoryMessages: MinimalMessage[];
+    accountSyncCounter: number;
+    accountSettings: AccountSettings;
+    registered: boolean;
+    pairingCode: string | undefined;
+    lastPropHash: string | undefined;
+    routingInfo: Buffer | undefined;
+};
+
+type Awaitable<T> = T | Promise<T>;
+
+export type SignalKeyStore = {
+    get<T extends keyof SignalDataTypeMap>(type: T, ids: string[]): Awaitable<{ [id: string]: SignalDataTypeMap[T]; }>;
+    set(data: SignalDataSet): Awaitable<void>;
+    clear?(): Awaitable<void>;
+};
+
+export type SignalDataSet = { [T in keyof SignalDataTypeMap]?: { [id: string]: SignalDataTypeMap[T] | null; }; };
+
+export type SignalDataTypeMap = {
+    session: Uint8Array;
+    "pre-key": KeyPair;
+    "sender-key": Uint8Array;
+    "sender-key-memory": { [jid: string]: boolean; };
+    "app-state-sync-key": IAppStateSyncKey;
+    "app-state-sync-version": LTHashState;
+};
+
+export type IAppStateSyncKey = {
+    keyData?: Uint8Array | null;
+    fingerprint?: IFingerprintState | null;
+    timestamp?: number | Long | null;
+};
+
+export type IFingerprintState = {
+    rawId?: number | null;
+    currentIndex?: number | null;
+    deviceIndexes?: number[] | null;
+};
+
+export type LTHashState = {
+    version: number;
+    hash: Buffer;
+    indexValueMap: {
+        [indexMacBase64: string]: { valueMac: Uint8Array | Buffer; };
+    };
+};
