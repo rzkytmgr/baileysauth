@@ -1,5 +1,5 @@
 {
-  "name": "baileys-auth",
+  "name": "baileysauth",
   "version": "1.0.0",
   "description": "Multiple authentication method for Baileys socket Whatsapp bot library",
   "main": "dist/index.js",
