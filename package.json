@@ -1,8 +1,8 @@
 {
   "name": "baileys-auth",
   "version": "1.0.0",
-  "description": "",
-  "main": ".dist/src/index.js",
+  "description": "Multiple authentication method for Baileys socket Whatsapp bot library",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc --project tsconfig.json && resolve-tspaths",
@@ -22,11 +22,15 @@
     "name": "Rizky Aulia Tumangger",
     "url": "https://github.com/rzkytmgr"
   },
+  "files": [
+    "dist/"
+  ],
   "license": "ISC",
   "packageManager": "pnpm@10.14.0",
   "devDependencies": {
     "@eslint/js": "^9.32.0",
     "@types/node": "^24.2.0",
+    "@types/pg": "^8.15.5",
     "dprint": "^0.50.1",
     "eslint": "^9.32.0",
     "husky": "^9.1.7",
@@ -41,7 +45,11 @@
   "dependencies": {
     "@protobufjs/base64": "^1.1.2",
     "libsignal": "^2.0.1",
-    "long": "^5.3.2",
-    "mysql2": "^3.14.3"
+    "long": "^5.3.2"
+  },
+  "peerDependencies": {
+    "mongodb": "^6.18.0",
+    "mysql2": "^3.14.3",
+    "pg": "^8.16.3"
   }
 }
