@@ -1,19 +1,23 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "module": "commonjs",
-    "rootDir": "./",
+    "module": "esnext",
+    "rootDir": "src",
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"]
     },
-    "outDir": "./dist",
+    "outDir": "dist",
+    "declarationDir": "dist",
     "newLine": "crlf",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "moduleResolution": "node",
     "noImplicitAny": true,
-    "noUnusedParameters": false
+    "noUnusedParameters": false,
+    "removeComments": true,
+    "declaration": true
   },
   "exclude": [
     "node_modules",
