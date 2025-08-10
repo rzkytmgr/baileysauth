@@ -1,5 +1,17 @@
-import Long from "long";
-import { ConnectionOptions } from "mysql2/promise";
+import type Long from "long";
+import type {
+    Collection,
+    MongoClient,
+    MongoClientOptions,
+} from "mongodb";
+import type {
+    ConnectionOptions,
+    Connection as MySQLConnection,
+} from "mysql2/promise";
+import type {
+    ConnectionConfig,
+    Client as PostgeSQLClient,
+} from "pg";
 
 export type SessionDBResult = {
     name: string;
@@ -20,12 +32,20 @@ export type ConnectionOptionsBase = {
     database: string;
 };
 
+export type PostgreSQLConnectionClient = PostgeSQLClient;
+export type MySQLConnectionClient = MySQLConnection;
+export type MongoDBConnectionCollection = Collection;
+export type MongoDBConnectionClient = MongoClient;
+
 export type MySQLConnectionOptions = Partial<ConnectionOptions> & ConnectionOptionsBase;
+export type PostgreSQLConnectionOptions = Partial<ConnectionConfig> & ConnectionOptionsBase;
+export type MongoDBConnectionOptions = Partial<MongoClientOptions> & { connection: string; } & ConnectionOptionsBase;
 
 export type BaileysAuthStateOptions =
     | string
+    | ({ dialect: "mongo" | "mongodb"; } & MongoDBConnectionOptions)
     | ({ dialect: "mysql"; } & MySQLConnectionOptions)
-    | ({ dialect: "pg"; } & ConnectionOptionsBase);
+    | ({ dialect: "pg" | "postgres"; } & PostgreSQLConnectionOptions);
 
 export type Fingerprint = {
     rawId: number | null;

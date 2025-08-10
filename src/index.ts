@@ -1,11 +1,11 @@
-import { BaileysAuthConnection } from "./core";
-import util from "./Utils";
+import { BaileysAuthConnection } from "@/core";
+import util from "@/Utils";
 import type {
     AuthenticationCreds,
     BaileysAuthStateOptions,
     IConnectionBase,
     SignalDataTypeMap,
-} from "./Types";
+} from "@/Types";
 
 const useBaileysAuthState = async (options: BaileysAuthStateOptions) => {
     const connection = <IConnectionBase> await BaileysAuthConnection.connect(options);
@@ -55,3 +55,4 @@ const useBaileysAuthState = async (options: BaileysAuthStateOptions) => {
 };
 
 export { useBaileysAuthState };
+export default useBaileysAuthState;

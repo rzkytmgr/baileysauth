@@ -1,5 +1,9 @@
-import { MySQLConnection } from "@/Services";
 import type { BaileysAuthStateOptions } from "@/Types";
+import {
+    MongoDBConnection,
+    MySQLConnection,
+    PostgreSQLConnection,
+} from "@/Services";
 
 class BaileysAuthConnection {
     static async connect(options: BaileysAuthStateOptions) {
@@ -27,10 +31,10 @@ class BaileysAuthConnection {
             case "pg":
             case "postgres":
             case "postgresql":
-                return "postgresql";
+                return await PostgreSQLConnection.init(options);
             case "mongodb":
             case "mongodb+srv":
-                return "mongodb";
+                return await MongoDBConnection.init(options);
             default:
                 throw new TypeError("Cannot afford connection based on connection string you've input");
         }

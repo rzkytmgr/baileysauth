@@ -1,5 +1,5 @@
 import { constants } from "@/Lib/constants";
-import { BaileysAuthStateOptions } from "@/Types";
+import type { BaileysAuthStateOptions } from "@/Types";
 
 class ConnectionBase<T extends BaileysAuthStateOptions> {
     protected sessionName: string = constants.DEFAULT_SESSION_NAME;

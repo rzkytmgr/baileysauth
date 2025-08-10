@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* @ts-ignore */
 import * as libsignal from "libsignal";
 import base64 from "@protobufjs/base64";
