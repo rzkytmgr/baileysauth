@@ -27,8 +27,8 @@ class PostgreSQLConnection extends ConnectionBase<BaileysAuthStateOptions> imple
                 const connectionOptions = util.omit<PostgreSQLConnectionOptions, PostgreSQLBaseConnectionOptions>({
                     ...options,
                     ...options.args,
-                })
-                
+                });
+
                 table = options.table || table;
                 client = new pg.Client(connectionOptions);
             }

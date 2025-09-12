@@ -26,7 +26,9 @@ class MongoDBConnection extends ConnectionBase<BaileysAuthStateOptions> implemen
                 client = new mongo.MongoClient(options);
             } else {
                 collection = options.collection || collection;
-                const connectionString = `mongodb://${options.user}:${options.password}@${options.host}:${options.port || 27017}/${options.database}`;
+                const connectionString = `mongodb://${options.user}:${options.password}@${options.host}:${
+                    options.port || 27017
+                }/${options.database}`;
                 client = new mongo.MongoClient(connectionString, options.args);
             }
 

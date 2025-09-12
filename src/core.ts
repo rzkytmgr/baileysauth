@@ -10,7 +10,8 @@ class BaileysAuthConnection {
         let dialect: string | null = null;
 
         if (typeof options === "string") {
-            const regex = /^([a-zA-Z][a-zA-Z0-9+\-.]*):\/\/([^:@\s\/]+(?::[^@\s\/]*)?@)?([^\s:\/]+)(?::(\d+))?(\/[^?#\s]*)?(\?[^#\s]*)?$/;
+            const regex =
+                /^([a-zA-Z][a-zA-Z0-9+\-.]*):\/\/([^:@\s\/]+(?::[^@\s\/]*)?@)?([^\s:\/]+)(?::(\d+))?(\/[^?#\s]*)?(\?[^#\s]*)?$/;
 
             if (!regex.test(options)) {
                 throw new TypeError("Invalid connection string. doesn't looks like connection string");
@@ -21,12 +22,12 @@ class BaileysAuthConnection {
                 dialect = connectionPrefix[1];
             }
 
-            const dialectMapping: { [key: string] : string } = {
-                postgres: 'pg',
-                postgresql: 'pg',
-                'mongodb+srv': 'mongodb'
+            const dialectMapping: { [key: string]: string; } = {
+                postgres: "pg",
+                postgresql: "pg",
+                "mongodb+srv": "mongodb",
             };
-            
+
             dialect = dialectMapping[dialect!] || dialect;
         } else {
             dialect = options.dialect;
@@ -45,7 +46,6 @@ class BaileysAuthConnection {
             default:
                 throw new TypeError("Cannot afford connection based on connection string you've input");
         }
-        
     }
 }
 

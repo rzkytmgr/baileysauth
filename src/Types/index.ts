@@ -62,28 +62,32 @@ export type SQLConnectionOptions<
     };
 
 export type MySQLBaseConnectionOptions = ConnectionOptions;
-export type MySQLConnectionOptions = ({ dialect: "mysql"; } & SQLConnectionOptions<
-    MySQLBaseConnectionOptions,
-    MySQLRequiredAuthFields,
-    MySQLOptionalAuthFields
->);
+export type MySQLConnectionOptions =
+    & { dialect: "mysql"; }
+    & SQLConnectionOptions<
+        MySQLBaseConnectionOptions,
+        MySQLRequiredAuthFields,
+        MySQLOptionalAuthFields
+    >;
 
 export type PostgreSQLBaseConnectionOptions = ConnectionConfig;
-export type PostgreSQLConnectionOptions = ({ dialect: "pg"; } & SQLConnectionOptions<
-    PostgreSQLBaseConnectionOptions,
-    PostgreRequiredAuthFields,
-    PostgreOptionalAuthFields
->);
+export type PostgreSQLConnectionOptions =
+    & { dialect: "pg"; }
+    & SQLConnectionOptions<
+        PostgreSQLBaseConnectionOptions,
+        PostgreRequiredAuthFields,
+        PostgreOptionalAuthFields
+    >;
 
 export type MongoDBBaseConnectionOptions = MongoClientOptions;
-export type MongoDBConnectionOptions = ({ dialect: "mongodb"; } & NoSQLBasedConnectionOptionsBase & {
+export type MongoDBConnectionOptions = { dialect: "mongodb"; } & NoSQLBasedConnectionOptionsBase & {
     host: string;
     user: string;
     password: string;
     database: string;
     port?: string | number;
-    args?: MongoDBBaseConnectionOptions
-});
+    args?: MongoDBBaseConnectionOptions;
+};
 
 export type BaileysAuthStateOptions =
     | string

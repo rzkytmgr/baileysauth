@@ -11,7 +11,7 @@ class ConnectionBase<T extends BaileysAuthStateOptions> {
 
         if (typeof options !== "string") {
             this.session = options.session || this.session;
-            if (options.dialect === 'mongodb') {
+            if (options.dialect === "mongodb") {
                 this.table = options.collection || this.table;
             } else {
                 this.table = options.table || this.table;
