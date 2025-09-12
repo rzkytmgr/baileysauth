@@ -11,6 +11,7 @@ class BaileysAuthConnection {
 
         if (typeof options === "string") {
             const regex =
+                // eslint-disable-next-line no-useless-escape
                 /^([a-zA-Z][a-zA-Z0-9+\-.]*):\/\/([^:@\s\/]+(?::[^@\s\/]*)?@)?([^\s:\/]+)(?::(\d+))?(\/[^?#\s]*)?(\?[^#\s]*)?$/;
 
             if (!regex.test(options)) {
