@@ -4,7 +4,6 @@ import { ConnectionBase } from "@/Services/base";
 import type {
     BaileysAuthStateOptions,
     IConnectionBase,
-    MongoDBBaseConnectionOptions,
     MongoDBConnectionClient,
     MongoDBConnectionCollection,
     MongoDBConnectionOptions,
