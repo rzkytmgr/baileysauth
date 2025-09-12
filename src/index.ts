@@ -2,12 +2,13 @@ import { BaileysAuthConnection } from "@/core";
 import util from "@/Utils";
 import type {
     AuthenticationCreds,
+    BaileysAuthState,
     BaileysAuthStateOptions,
     IConnectionBase,
     SignalDataTypeMap,
 } from "@/Types";
 
-const useBaileysAuthState = async (options: BaileysAuthStateOptions) => {
+const useBaileysAuthState = async (options: BaileysAuthStateOptions): Promise<BaileysAuthState> => {
     const connection = <IConnectionBase> await BaileysAuthConnection.connect(options);
 
     const creds: AuthenticationCreds = await connection.read("creds")

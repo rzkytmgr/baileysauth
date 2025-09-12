@@ -11,7 +11,7 @@ import type {
 
 const omit = <T extends BaileysAuthStateOptions, U>(
     record: T,
-    keys: string[] = ["dialect", "tableName", "sessionName"],
+    keys: string[] = ["dialect", "table", "session", "args", "collection"],
 ): U => {
     return <U> Object.fromEntries(
         Object.entries(record).filter(([key]) => !keys.includes(key)),

@@ -10,8 +10,7 @@ class BaileysAuthConnection {
         let dialect: string | null = null;
 
         if (typeof options === "string") {
-            const regex =
-                /^([a-zA-Z][a-zA-Z0-9+\-.]*):\/\/([^\s:@\\/]+)(:[^\s@\\/]*)?@([^\s:\\/]+)(:\d+)?(\/[^\s?#]*)?$/;
+            const regex = /^([a-zA-Z][a-zA-Z0-9+\-.]*):\/\/([^:@\s\/]+(?::[^@\s\/]*)?@)?([^\s:\/]+)(?::(\d+))?(\/[^?#\s]*)?(\?[^#\s]*)?$/;
 
             if (!regex.test(options)) {
                 throw new TypeError("Invalid connection string. doesn't looks like connection string");
@@ -21,23 +20,32 @@ class BaileysAuthConnection {
             if (connectionPrefix) {
                 dialect = connectionPrefix[1];
             }
+
+            const dialectMapping: { [key: string] : string } = {
+                postgres: 'pg',
+                postgresql: 'pg',
+                'mongodb+srv': 'mongodb'
+            };
+            
+            dialect = dialectMapping[dialect!] || dialect;
         } else {
             dialect = options.dialect;
         }
 
         switch (dialect) {
             case "mysql":
+                // @ts-ignore: options variable should be string or instance of MySQLConnectionOptions
                 return await MySQLConnection.init(options);
             case "pg":
-            case "postgres":
-            case "postgresql":
+                // @ts-ignore: options variable should be string or instance of PostgreSQLConnectionOptions
                 return await PostgreSQLConnection.init(options);
             case "mongodb":
-            case "mongodb+srv":
+                // @ts-ignore: options variable should be string or instance of MongoDBConnectionOptions
                 return await MongoDBConnection.init(options);
             default:
                 throw new TypeError("Cannot afford connection based on connection string you've input");
         }
+        
     }
 }
 

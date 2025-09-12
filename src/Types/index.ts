@@ -27,9 +27,15 @@ export type IConnectionBase = {
 };
 
 export type ConnectionOptionsBase = {
-    tableName?: string;
-    sessionName?: string;
-    database: string;
+    session: string;
+};
+
+export type SQLBasedConnectionOptionsBase = ConnectionOptionsBase & {
+    table: string;
+};
+
+export type NoSQLBasedConnectionOptionsBase = ConnectionOptionsBase & {
+    collection: string;
 };
 
 export type PostgreSQLConnectionClient = PostgeSQLClient;
@@ -37,15 +43,53 @@ export type MySQLConnectionClient = MySQLConnection;
 export type MongoDBConnectionCollection = Collection;
 export type MongoDBConnectionClient = MongoClient;
 
-export type MySQLConnectionOptions = Partial<ConnectionOptions> & ConnectionOptionsBase;
-export type PostgreSQLConnectionOptions = Partial<ConnectionConfig> & ConnectionOptionsBase;
-export type MongoDBConnectionOptions = Partial<MongoClientOptions> & { connection: string; } & ConnectionOptionsBase;
+export type MySQLRequiredAuthFields = "host" | "user" | "password" | "database";
+export type MySQLOptionalAuthFields = "port";
+
+export type PostgreRequiredAuthFields = MySQLRequiredAuthFields;
+export type PostgreOptionalAuthFields = MySQLOptionalAuthFields;
+
+export type SQLConnectionOptions<
+    T extends object,
+    RequiredFields extends keyof T,
+    OptionalFields extends keyof T,
+> =
+    & SQLBasedConnectionOptionsBase
+    & Required<Pick<T, RequiredFields>>
+    & Partial<Pick<T, OptionalFields>>
+    & {
+        args?: Omit<T, RequiredFields | OptionalFields>;
+    };
+
+export type MySQLBaseConnectionOptions = ConnectionOptions;
+export type MySQLConnectionOptions = ({ dialect: "mysql"; } & SQLConnectionOptions<
+    MySQLBaseConnectionOptions,
+    MySQLRequiredAuthFields,
+    MySQLOptionalAuthFields
+>);
+
+export type PostgreSQLBaseConnectionOptions = ConnectionConfig;
+export type PostgreSQLConnectionOptions = ({ dialect: "pg"; } & SQLConnectionOptions<
+    PostgreSQLBaseConnectionOptions,
+    PostgreRequiredAuthFields,
+    PostgreOptionalAuthFields
+>);
+
+export type MongoDBBaseConnectionOptions = MongoClientOptions;
+export type MongoDBConnectionOptions = ({ dialect: "mongodb"; } & NoSQLBasedConnectionOptionsBase & {
+    host: string;
+    user: string;
+    password: string;
+    database: string;
+    port?: string | number;
+    args?: MongoDBBaseConnectionOptions
+});
 
 export type BaileysAuthStateOptions =
     | string
-    | ({ dialect: "mongo" | "mongodb"; } & MongoDBConnectionOptions)
-    | ({ dialect: "mysql"; } & MySQLConnectionOptions)
-    | ({ dialect: "pg" | "postgres"; } & PostgreSQLConnectionOptions);
+    | MySQLConnectionOptions
+    | PostgreSQLConnectionOptions
+    | MongoDBConnectionOptions;
 
 export type Fingerprint = {
     rawId: number | null;
@@ -97,7 +141,7 @@ export type SignalIdentity = {
 export type IMeDetails = {
     id: string;
     lid?: string;
-    jid?: string;
+    phoneNumber?: string;
     name?: string;
     notify?: string;
     verifiedName?: string;
@@ -172,6 +216,7 @@ export type SignalDataTypeMap = {
     "sender-key-memory": { [jid: string]: boolean; };
     "app-state-sync-key": IAppStateSyncKey;
     "app-state-sync-version": LTHashState;
+    "lid-mapping": string;
 };
 
 export type IAppStateSyncKey = {
@@ -192,4 +237,10 @@ export type LTHashState = {
     indexValueMap: {
         [indexMacBase64: string]: { valueMac: Uint8Array | Buffer; };
     };
+};
+
+export type BaileysAuthState = {
+    state: AuthenticationState;
+    saveCreds: () => Promise<any>;
+    wipeCreds: () => Promise<any>;
 };

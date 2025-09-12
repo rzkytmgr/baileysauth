@@ -6,31 +6,34 @@ import type {
     IConnectionBase,
     MySQLConnectionOptions,
     MySQLConnectionClient,
+    MySQLBaseConnectionOptions,
 } from "@/Types";
 class MySQLConnection extends ConnectionBase<BaileysAuthStateOptions> implements IConnectionBase {
     constructor(private connection: MySQLConnectionClient, options: BaileysAuthStateOptions) {
         super(options);
     }
 
-    static async init(options: BaileysAuthStateOptions) {
+    static async init(options: string | MySQLConnectionOptions) {
         try {
             const mysql = await import("mysql2/promise");
 
             let connection: MySQLConnectionClient,
-                tableName = constants.DEFAULT_STORE_NAME;
+                table = constants.DEFAULT_STORE_NAME;
 
             if (typeof options === "string") {
                 connection = await mysql.createConnection(options);
             } else {
-                tableName = options.tableName || tableName;
-
-                connection = await mysql.createConnection(
-                    util.omit<BaileysAuthStateOptions, MySQLConnectionOptions>(options),
-                );
+                const connectionOptions = util.omit<MySQLConnectionOptions, MySQLBaseConnectionOptions>({
+                    ...options,
+                    ...options.args,
+                });
+                console.log(connectionOptions);
+                table = options.table || table;
+                connection = await mysql.createConnection(connectionOptions);
             }
 
             await connection.execute(`
-                CREATE TABLE IF NOT EXISTS ${tableName} (
+                CREATE TABLE IF NOT EXISTS ${table} (
                     session VARCHAR(40) NOT NULL,
                     identifier VARCHAR(100) NOT NULL,
                     value TEXT DEFAULT NULL,
@@ -50,15 +53,15 @@ class MySQLConnection extends ConnectionBase<BaileysAuthStateOptions> implements
     public async store(data: unknown, identifier: string) {
         const value = JSON.stringify(data, util.BufferReplacer);
         await this.connection.execute(
-            `INSERT INTO ${this.tableName} (session, identifier, value) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE value = ?;`,
-            [this.sessionName, identifier, value, value],
+            `INSERT INTO ${this.table} (session, identifier, value) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE value = ?;`,
+            [this.session, identifier, value, value],
         );
     }
 
     public async read(identifier: string) {
         const [result] = await this.connection.execute(
-            `SELECT value FROM ${this.tableName} WHERE identifier = ? AND session = ?`,
-            [identifier, this.sessionName],
+            `SELECT value FROM ${this.table} WHERE identifier = ? AND session = ?`,
+            [identifier, this.session],
         );
 
         // @ts-ignore
@@ -67,15 +70,15 @@ class MySQLConnection extends ConnectionBase<BaileysAuthStateOptions> implements
 
     public async remove(identifier: string) {
         await this.connection.execute(
-            `DELETE FROM ${this.tableName} WHERE identifier = ? AND session = ?`,
-            [identifier, this.sessionName],
+            `DELETE FROM ${this.table} WHERE identifier = ? AND session = ?`,
+            [identifier, this.session],
         );
     }
 
     public async wipe() {
         await this.connection.execute(
-            `DELETE FROM ${this.tableName} WHERE session = ?`,
-            [this.sessionName],
+            `DELETE FROM ${this.table} WHERE session = ?`,
+            [this.session],
         );
     }
 }
