@@ -7,8 +7,9 @@
   "scripts": {
     "build": "tsc --project tsconfig.json && resolve-tspaths",
     "format": "dprint fmt --config dprint.json",
+    "husky:prepare": "husky install",
     "lint": "eslint .",
-    "test": "echo \"test\""
+    "test": "sh -c 'tsx --test test/*.test.ts'"
   },
   "type": "module",
   "keywords": [
@@ -29,11 +30,15 @@
   "packageManager": "pnpm@10.14.0",
   "devDependencies": {
     "@eslint/js": "^9.32.0",
+    "@hapi/boom": "^10.0.1",
     "@types/node": "^24.2.0",
     "@types/pg": "^8.15.5",
+    "@types/qrcode": "^1.5.5",
+    "baileys": "7.0.0-rc.2",
     "dprint": "^0.50.1",
     "eslint": "^9.32.0",
     "husky": "^9.1.7",
+    "qrcode": "^1.5.4",
     "resolve-tspaths": "^0.8.23",
     "tsx": "^4.20.3",
     "typescript": "^5.9.2",
