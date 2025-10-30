@@ -52,6 +52,7 @@ const useBaileysAuthState = async (options: BaileysAuthStateOptions): Promise<Ba
         },
         saveCreds: async () => await connection.store(creds, "creds"),
         wipeCreds: async () => await connection.wipe(),
+        close: async () => await connection.close(),
     };
 };
 

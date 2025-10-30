@@ -47,9 +47,12 @@ class PostgreSQLConnection extends ConnectionBase<BaileysAuthStateOptions> imple
             await client.query(`CREATE INDEX IF NOT EXISTS idx_identifier ON "${table}" (identifier);`);
 
             return new PostgreSQLConnection(client, options);
-        } catch (err) {
-            console.error("Error PostgreSQL Connection", err);
-            throw err;
+        } catch (_err) {
+            if (!constants.BAILEYSAUTH_TESTING) {
+                console.error("Error PostgreSQL Connection", _err);
+            }
+
+            throw _err;
         }
     }
 
@@ -82,6 +85,10 @@ class PostgreSQLConnection extends ConnectionBase<BaileysAuthStateOptions> imple
             `DELETE FROM "${this.table}" WHERE session = ?`,
             [this.session],
         );
+    }
+
+    public async close() {
+        await this.connection.end();
     }
 }
 

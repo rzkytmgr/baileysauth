@@ -24,6 +24,7 @@ export type IConnectionBase = {
     remove: (identifier: string) => Promise<any>;
     read: (identifier: string) => Promise<any>;
     wipe: () => Promise<any>;
+    close: () => Promise<void>;
 };
 
 export type ConnectionOptionsBase = {
@@ -247,4 +248,5 @@ export type BaileysAuthState = {
     state: AuthenticationState;
     saveCreds: () => Promise<any>;
     wipeCreds: () => Promise<any>;
+    close: () => Promise<void>;
 };

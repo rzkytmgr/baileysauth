@@ -10,21 +10,30 @@ import type {
 } from "@/Types";
 
 class MongoDBConnection extends ConnectionBase<BaileysAuthStateOptions> implements IConnectionBase {
-    constructor(private connection: MongoDBConnectionCollection, options: BaileysAuthStateOptions) {
+    private connection!: MongoDBConnectionCollection;
+
+    constructor(private client: MongoDBConnectionClient, options: string | MongoDBConnectionOptions) {
         super(options);
+
+        let collection = constants.DEFAULT_STORE_NAME;
+        if (typeof options !== "string") {
+            collection = options.collection || collection;
+        }
+
+        const db = typeof options !== "string" ? client.db(options.database) : client.db();
+        const conn = db.collection(collection);
+        this.connection = conn;
     }
 
     static async init(options: string | MongoDBConnectionOptions) {
         try {
             const mongo = await import("mongodb");
 
-            let client: MongoDBConnectionClient,
-                collection = constants.DEFAULT_STORE_NAME;
+            let client: MongoDBConnectionClient;
 
             if (typeof options === "string") {
                 client = new mongo.MongoClient(options);
             } else {
-                collection = options.collection || collection;
                 const connectionString = `mongodb://${options.user}:${options.password}@${options.host}:${
                     options.port || 27017
                 }/${options.database}`;
@@ -32,13 +41,13 @@ class MongoDBConnection extends ConnectionBase<BaileysAuthStateOptions> implemen
             }
 
             await client.connect();
-            const db = typeof options !== "string" ? client.db(options.database) : client.db();
-            const conn = db.collection(collection);
+            return new MongoDBConnection(client, options);
+        } catch (_err) {
+            if (!constants.BAILEYSAUTH_TESTING) {
+                console.error("Error MongoDB Connection", _err);
+            }
 
-            return new MongoDBConnection(conn, options);
-        } catch (err) {
-            console.error("Error MongoDB Connection", err);
-            throw err;
+            throw _err;
         }
     }
 
@@ -77,6 +86,10 @@ class MongoDBConnection extends ConnectionBase<BaileysAuthStateOptions> implemen
         await this.connection.deleteOne({
             session: this.session,
         });
+    }
+
+    public async close() {
+        await this.client.close();
     }
 }
 

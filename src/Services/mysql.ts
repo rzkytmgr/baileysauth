@@ -27,7 +27,6 @@ class MySQLConnection extends ConnectionBase<BaileysAuthStateOptions> implements
                     ...options,
                     ...options.args,
                 });
-                console.log(connectionOptions);
                 table = options.table || table;
                 connection = await mysql.createConnection(connectionOptions);
             }
@@ -44,9 +43,12 @@ class MySQLConnection extends ConnectionBase<BaileysAuthStateOptions> implements
             `);
 
             return new MySQLConnection(connection, options);
-        } catch (err) {
-            console.error("Error MySQL Connection", err);
-            throw err;
+        } catch (_err) {
+            if (!constants.BAILEYSAUTH_TESTING) {
+                console.error("Error MySQL Connection", _err);
+            }
+
+            throw _err;
         }
     }
 
@@ -80,6 +82,10 @@ class MySQLConnection extends ConnectionBase<BaileysAuthStateOptions> implements
             `DELETE FROM ${this.table} WHERE session = ?`,
             [this.session],
         );
+    }
+
+    public async close() {
+        await this.connection.end();
     }
 }
 
