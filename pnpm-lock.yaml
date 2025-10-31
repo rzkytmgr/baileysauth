@@ -619,8 +619,8 @@ packages:
     resolution: {integrity: sha512-ldgiJ+VAhQCfIjeOgu8Kj5nSxds0ktPOSO9p4+0VDH2R2pLvQraaM5Oen2d7NxzMCm+Sn/vJT+mv2H5u6b/3fA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@whiskeysockets/libsignal-node@https://codeload.github.com/whiskeysockets/libsignal-node/tar.gz/4d08331a833727c338c1a90041d17b870210dfae':
-    resolution: {tarball: https://codeload.github.com/whiskeysockets/libsignal-node/tar.gz/4d08331a833727c338c1a90041d17b870210dfae}
+  '@whiskeysockets/libsignal-node@https://codeload.github.com/whiskeysockets/libsignal-node/tar.gz/e81ecfc32eb74951d789ab37f7e341ab66d5fff1':
+    resolution: {tarball: https://codeload.github.com/whiskeysockets/libsignal-node/tar.gz/e81ecfc32eb74951d789ab37f7e341ab66d5fff1}
     version: 2.0.1
 
   acorn-jsx@5.3.2:
@@ -1987,7 +1987,7 @@ snapshots:
       '@typescript-eslint/types': 8.39.0
       eslint-visitor-keys: 4.2.1
 
-  '@whiskeysockets/libsignal-node@https://codeload.github.com/whiskeysockets/libsignal-node/tar.gz/4d08331a833727c338c1a90041d17b870210dfae':
+  '@whiskeysockets/libsignal-node@https://codeload.github.com/whiskeysockets/libsignal-node/tar.gz/e81ecfc32eb74951d789ab37f7e341ab66d5fff1':
     dependencies:
       curve25519-js: 0.0.4
       protobufjs: 6.8.8
@@ -2039,7 +2039,7 @@ snapshots:
       '@hapi/boom': 9.1.4
       async-mutex: 0.5.0
       axios: 1.12.0
-      libsignal: '@whiskeysockets/libsignal-node@https://codeload.github.com/whiskeysockets/libsignal-node/tar.gz/4d08331a833727c338c1a90041d17b870210dfae'
+      libsignal: '@whiskeysockets/libsignal-node@https://codeload.github.com/whiskeysockets/libsignal-node/tar.gz/e81ecfc32eb74951d789ab37f7e341ab66d5fff1'
       lru-cache: 11.2.1
       music-metadata: 11.8.3
       pino: 9.9.5
