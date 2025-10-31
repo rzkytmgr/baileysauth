@@ -1,0 +1,39 @@
+name: test on node 18, 20, 22, 24
+
+on:
+    push: 
+        branches: 
+            - master
+    pull_request:
+        branches:
+            - master
+    workflow_dispatch: 
+
+jobs:
+    test:
+        runs-on: ubuntu-22.04
+        timeout-minutes: 8
+        strategy:
+            matrix:
+                node: [18, 20, 22, 24]
+
+        steps:
+            - name: checkout repository
+              uses: actions/checkout@v4
+              with:
+                fetch-depth: 0
+
+            - name: docker setup
+              uses: docker/setup-buildx-action@v3
+            
+            - name: docker compose test
+              run: |
+                export NODE_VERSION=${{ matrix.node }}
+                echo "test on node ${NODE_VERSION}"
+                docker compose up --abort-on-container-exit --build app
+            
+            - name: tear down all containers
+              if: always()
+              run: |
+                docker compose down --volumes --remove-orphans
+                
