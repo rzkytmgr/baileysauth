@@ -9,7 +9,7 @@
     "format": "dprint fmt --config dprint.json",
     "husky:prepare": "husky install",
     "lint": "eslint .",
-    "test": "sh -c 'tsx --test test/*.test.ts'"
+    "test": "sh -c 'tsx --env-file=.env --test test/*.test.ts'"
   },
   "type": "module",
   "keywords": [
