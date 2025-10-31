@@ -5,7 +5,7 @@ WORKDIR /app
 
 COPY src/ src/
 COPY test/ test/
-COPY *.yaml *.mjs *.json .env .
+COPY *.yaml *.mjs *.json .env.test .
 
 RUN echo 'container building'
 RUN npm i -g pnpm
