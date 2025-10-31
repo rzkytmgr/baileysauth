@@ -32,7 +32,7 @@ class MySQLConnection extends ConnectionBase<BaileysAuthStateOptions> implements
             }
 
             await connection.execute(`
-                CREATE TABLE IF NOT EXISTS ${table} (
+                CREATE TABLE IF NOT EXISTS \`${table}\` (
                     session VARCHAR(40) NOT NULL,
                     identifier VARCHAR(100) NOT NULL,
                     value TEXT DEFAULT NULL,
@@ -55,14 +55,14 @@ class MySQLConnection extends ConnectionBase<BaileysAuthStateOptions> implements
     public async store(data: unknown, identifier: string) {
         const value = JSON.stringify(data, util.BufferReplacer);
         await this.connection.execute(
-            `INSERT INTO ${this.table} (session, identifier, value) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE value = ?;`,
+            `INSERT INTO \`${this.table}\` (session, identifier, value) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE value = ?;`,
             [this.session, identifier, value, value],
         );
     }
 
     public async read(identifier: string) {
         const [result] = await this.connection.execute(
-            `SELECT value FROM ${this.table} WHERE identifier = ? AND session = ?`,
+            `SELECT value FROM \`${this.table}\` WHERE identifier = ? AND session = ?`,
             [identifier, this.session],
         );
 
@@ -72,14 +72,14 @@ class MySQLConnection extends ConnectionBase<BaileysAuthStateOptions> implements
 
     public async remove(identifier: string) {
         await this.connection.execute(
-            `DELETE FROM ${this.table} WHERE identifier = ? AND session = ?`,
+            `DELETE FROM \`${this.table}\` WHERE identifier = ? AND session = ?`,
             [identifier, this.session],
         );
     }
 
     public async wipe() {
         await this.connection.execute(
-            `DELETE FROM ${this.table} WHERE session = ?`,
+            `DELETE FROM \`${this.table}\` WHERE session = ?`,
             [this.session],
         );
     }
