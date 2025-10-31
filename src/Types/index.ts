@@ -202,6 +202,7 @@ export type AuthenticationCreds = SignalCreds & {
     pairingCode: string | undefined;
     lastPropHash: string | undefined;
     routingInfo: Buffer | undefined;
+    additionalData?: any | undefined;
 };
 
 type Awaitable<T> = T | Promise<T>;
@@ -222,6 +223,7 @@ export type SignalDataTypeMap = {
     "app-state-sync-key": IAppStateSyncKey;
     "app-state-sync-version": LTHashState;
     "lid-mapping": string;
+    "device-list": string[];
 };
 
 export type IAppStateSyncKey = {
