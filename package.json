@@ -26,6 +26,14 @@
   "files": [
     "dist/"
   ],
+  "homepage": "https://github.com/rzkytmgr/baileysauth",
+  "bugs": {
+    "url": "https://github.com/rzkytmgr/baileysauth/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rzkytmgr/baileysauth.git"
+  },
   "license": "ISC",
   "packageManager": "pnpm@10.14.0",
   "devDependencies": {
