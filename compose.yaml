@@ -1,0 +1,66 @@
+name: "services composer"
+
+services:
+    app:
+        build: .
+        depends_on:
+            mysql:
+                condition: service_healthy
+            pg:
+                condition: service_healthy
+            mongo:
+                condition: service_healthy
+        environment:
+            APP_SESSION: test_auth
+            APP_STORE: test_store
+            TEST_MYSQL_HOST: mysql
+            TEST_MYSQL_USER: root
+            TEST_MYSQL_PASSWORD: password
+            TEST_MYSQL_PORT: 3306
+            TEST_PG_HOST: pg
+            TEST_PG_USER: postgres
+            TEST_PG_PASSWORD: password
+            TEST_PG_PORT: 5432
+            TEST_MONGO_HOST: mongo
+            TEST_MONGO_USER: mongo
+            TEST_MONGO_PASSWORD: password
+            TEST_MONGO_PORT: 27017
+        command:
+            /bin/sh -c 'pnpm test'
+        networks:
+            - bauthtest
+    mysql:
+        image: mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+        healthcheck:
+            test: ["CMD", "mysqladmin", "ping", "-ppassword"]
+            interval: 3s
+            retries: 10
+        networks:
+            - bauthtest
+    pg:
+        image: postgres
+        environment:
+            POSTGRES_PASSWORD: password
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 3s
+            retries: 10
+        networks:
+            - bauthtest
+    mongo:
+        image: mongo
+        healthcheck:
+            test: ["CMD-SHELL", "mongosh --quiet --eval 'db.runCommand({ ping: 1 })'"]
+            interval: 3s
+            retries: 10
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: mongo
+            MONGO_INITDB_ROOT_PASSWORD: password
+        networks:
+            - bauthtest
+
+networks:
+  bauthtest:
+    driver: bridge
