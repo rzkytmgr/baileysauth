@@ -2,7 +2,11 @@ name: "services composer"
 
 services:
     app:
-        build: .
+        build:
+            context: .
+            dockerfile: Dockerfile
+            args:
+                NODE_VERSION: ${NODE_VERSION:-20}
         depends_on:
             mysql:
                 condition: service_healthy
