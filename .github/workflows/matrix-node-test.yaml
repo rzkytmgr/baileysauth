@@ -1,4 +1,4 @@
-name: test on node 18, 20, 22, 24
+name: matrix test node version
 
 on:
     push: 
