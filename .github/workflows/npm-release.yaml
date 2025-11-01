@@ -1,0 +1,40 @@
+name: release package
+
+on:
+    push:
+        tags:
+            - 'v*'
+
+permissions:
+    contents: read
+    id-token: write
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+        
+        steps:
+            - name: checkout repository
+              uses: actions/checkout@v4
+            
+            - name: setup nodejs
+              uses: actions/setup-node@v4
+              with:
+                node-version: '20'
+                registry-url: 'https://registry.npmjs.org/'
+            
+            - name: setup pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                version: 10.14.0
+
+            - name: clean install
+              run: pnpm install --frozen-lockfile
+
+            - name: build package
+              run: pnpm build
+
+            - name: publish package
+              run: pnpm publish --provenance --no-git-checks
+              env:
+                NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
