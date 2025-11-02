@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert";
 import crypto from "node:crypto";
-import { useBaileysAuthState } from "../src";
+import { useBaileysAuthState } from "../dist/index";
 import mysql2 from "mysql2/promise";
 import pg from "pg";
 import mongodb from "mongodb";
@@ -225,7 +225,7 @@ test("core function test", async (t) => {
             );
 
             await auth.state.keys.set({
-                test: {
+                "lid-mapping": {
                     foo: "bar",
                 },
             });
@@ -250,7 +250,7 @@ test("core function test", async (t) => {
             });
 
             await auth.state.keys.set({
-                test: {
+                "lid-mapping": {
                     foo: "bar",
                 },
             });
