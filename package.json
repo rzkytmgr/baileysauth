@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc --project tsconfig.json && resolve-tspaths",
+    "build:tsc": "tsc --project tsconfig.json && resolve-tspaths",
+    "build:swc": "swc src -d dist --strip-leading-paths && resolve-tspaths",
     "format": "dprint fmt --config dprint.json",
     "husky:prepare": "husky install",
     "lint": "eslint .",
@@ -39,6 +40,8 @@
   "devDependencies": {
     "@eslint/js": "^9.32.0",
     "@hapi/boom": "^10.0.1",
+    "@swc/cli": "^0.7.8",
+    "@swc/core": "^1.14.0",
     "@types/node": "^24.2.0",
     "@types/pg": "^8.15.5",
     "@types/qrcode": "^1.5.5",

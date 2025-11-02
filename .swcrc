@@ -1,0 +1,24 @@
+{
+    "jsc": {
+        "target": "es2020",
+        "parser": {
+            "syntax": "typescript",
+            "tsx": false,
+            "decorators": false,
+            "dynamicImport": true
+        },
+        "baseUrl": "./",
+        "paths": {
+            "@/*": ["src/*"]
+        },
+        "keepClassNames": true,
+        "loose": false
+    },
+    "minify": true,
+    "module": {
+        "type": "es6",
+        "strict": true,
+        "ignoreDynamic": false
+    },
+    "sourceMaps": false
+}

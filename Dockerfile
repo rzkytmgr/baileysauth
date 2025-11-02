@@ -12,6 +12,6 @@ RUN npm i -g pnpm
 RUN pnpm i
 RUN pnpm format
 RUN pnpm lint
-RUN pnpm build
+RUN pnpm build:swc && pnpm build:tsc
 
 CMD ["pnpm", "test"]

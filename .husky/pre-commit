@@ -2,4 +2,4 @@
 pnpm format
 pnpm lint
 sh test.sh
-pnpm build
+pnpm build:swc && pnpm build:tsc

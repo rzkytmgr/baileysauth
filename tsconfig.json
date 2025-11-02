@@ -17,7 +17,8 @@
     "noImplicitAny": true,
     "noUnusedParameters": false,
     "removeComments": true,
-    "declaration": true
+    "declaration": true,
+    "emitDeclarationOnly": true,
   },
   "exclude": [
     "node_modules",
