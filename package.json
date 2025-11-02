@@ -34,7 +34,7 @@
     "type": "git",
     "url": "https://github.com/rzkytmgr/baileysauth.git"
   },
-  "license": "ISC",
+  "license": "MIT",
   "packageManager": "pnpm@10.14.0",
   "devDependencies": {
     "@eslint/js": "^9.32.0",
