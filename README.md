@@ -4,11 +4,11 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/baileys-v7.0.0--rc.6-x?labelColor=%230bd09f&color=%23f2f5f4">
-  <img src="https://img.shields.io/badge/🔒%20baileysauth-v1.1.0-x?labelColor=%23cdb34c&color=%23f2f5f4">
+  <img src="https://img.shields.io/npm/v/baileysauth?label=%20baileysauth&labelColor=%23cdb34c&color=%23f2f5f4">
   <br>
   <img src="https://img.shields.io/npm/unpacked-size/baileysauth?label=size">
   <img src="https://img.shields.io/github/actions/workflow/status/rzkytmgr/baileysauth/matrix-node-test.yaml">
-  <img src="https://img.shields.io/npm/v/baileysauth">
+  <img src="https://img.shields.io/npm/v/baileysauth?label=npm%20release">
   <img src="https://img.shields.io/npm/dw/baileysauth">
 </p>
 
@@ -68,8 +68,8 @@ const { saveCreds, state } = await useBaileysAuthState(
   "mysql://<username>:<password>@localhost:3306/mydatabase"
 );
 ```
-> [!WARNING]
-> The connection string method currently does not support custom table or session names. This means you cannot create multiple sessions when using this connection method.
+> [!NOTE]
+> Since the release of version `v1.2.0` baileysauth has supported custom table name and session name for connection string connect method. Please check the [example](https://github.com/rzkytmgr/baileysauth/tree/master/example) directory to see how to customize it.
 
 ### Using Connection Options
 
@@ -108,4 +108,4 @@ For usage examples, you can refer to the example directory. [Check it out!](http
 If you have any question or you have an issue when trying to use the package feel free to [create an issue](https://github.com/rzkytmgr/baileysauth/issues) or [make a pull request](https://github.com/rzkytmgr/baileysauth/pulls) to contribute.
 
 ---
-<sub>Made with ❤️ by <a href="https://instagram.com/rzkytmgr">Rizky Aulia Tumangger</a> - Copyright All Rights Reserved © 2025</sub>
+<sub>Made with ❤️ by <a href="https://github.com/rzkytmgr">Rizky Aulia Tumangger</a> - Copyright All Rights Reserved © 2025</sub>
