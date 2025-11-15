@@ -3,13 +3,20 @@ import util from "@/Utils";
 import type {
     AuthenticationCreds,
     BaileysAuthState,
+    BaileysAuthStateArgs,
     BaileysAuthStateOptions,
     IConnectionBase,
     SignalDataTypeMap,
 } from "@/Types";
 
-const useBaileysAuthState = async (options: BaileysAuthStateOptions): Promise<BaileysAuthState> => {
-    const connection = <IConnectionBase> await BaileysAuthConnection.connect(options);
+function useBaileysAuthState(conn: string, args?: BaileysAuthStateArgs): Promise<BaileysAuthState>;
+function useBaileysAuthState(conn: Exclude<BaileysAuthStateOptions, string>): Promise<BaileysAuthState>;
+
+async function useBaileysAuthState(
+    conn: BaileysAuthStateOptions,
+    args?: BaileysAuthStateArgs,
+): Promise<BaileysAuthState> {
+    const connection = <IConnectionBase> await BaileysAuthConnection.connect(conn, args);
 
     const creds: AuthenticationCreds = await connection.read("creds")
         || util.initializeAuthenticationCredentials();
@@ -54,7 +61,7 @@ const useBaileysAuthState = async (options: BaileysAuthStateOptions): Promise<Ba
         wipeCreds: async () => await connection.wipe(),
         close: async () => await connection.close(),
     };
-};
+}
 
 export { useBaileysAuthState };
 export default useBaileysAuthState;

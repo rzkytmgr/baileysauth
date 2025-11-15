@@ -1,4 +1,7 @@
-import type { BaileysAuthStateOptions } from "@/Types";
+import type {
+    BaileysAuthStateArgs,
+    BaileysAuthStateOptions,
+} from "@/Types";
 import {
     MongoDBConnection,
     MySQLConnection,
@@ -6,19 +9,22 @@ import {
 } from "@/Services";
 
 class BaileysAuthConnection {
-    static async connect(options: BaileysAuthStateOptions) {
+    static async connect(
+        conn: BaileysAuthStateOptions,
+        args?: BaileysAuthStateArgs,
+    ) {
         let dialect: string | null = null;
 
-        if (typeof options === "string") {
+        if (typeof conn === "string") {
             const regex =
                 // eslint-disable-next-line no-useless-escape
                 /^([a-zA-Z][a-zA-Z0-9+\-.]*):\/\/([^:@\s\/]+(?::[^@\s\/]*)?@)?([^\s:\/]+)(?::(\d+))?(\/[^?#\s]*)?(\?[^#\s]*)?$/;
 
-            if (!regex.test(options)) {
+            if (!regex.test(conn)) {
                 throw new TypeError("Invalid connection string. doesn't looks like connection string");
             }
 
-            const connectionPrefix = options.match(/^([^:]+):\/\//);
+            const connectionPrefix = conn.match(/^([^:]+):\/\//);
             if (connectionPrefix) {
                 dialect = connectionPrefix[1];
             }
@@ -31,19 +37,19 @@ class BaileysAuthConnection {
 
             dialect = dialectMapping[dialect!] || dialect;
         } else {
-            dialect = options.dialect;
+            dialect = conn.dialect;
         }
 
         switch (dialect) {
             case "mysql":
                 // @ts-ignore: options variable should be string or instance of MySQLConnectionOptions
-                return await MySQLConnection.init(options);
+                return await MySQLConnection.init(conn, args);
             case "pg":
                 // @ts-ignore: options variable should be string or instance of PostgreSQLConnectionOptions
-                return await PostgreSQLConnection.init(options);
+                return await PostgreSQLConnection.init(conn, args);
             case "mongodb":
                 // @ts-ignore: options variable should be string or instance of MongoDBConnectionOptions
-                return await MongoDBConnection.init(options);
+                return await MongoDBConnection.init(conn, args);
             default:
                 throw new TypeError("Cannot afford connection based on connection string you've input");
         }

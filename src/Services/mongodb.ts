@@ -2,6 +2,7 @@ import util from "@/Utils";
 import { constants } from "@/Lib/constants";
 import { ConnectionBase } from "@/Services/base";
 import type {
+    BaileysAuthStateArgs,
     BaileysAuthStateOptions,
     IConnectionBase,
     MongoDBConnectionClient,
@@ -12,20 +13,26 @@ import type {
 class MongoDBConnection extends ConnectionBase<BaileysAuthStateOptions> implements IConnectionBase {
     private connection!: MongoDBConnectionCollection;
 
-    constructor(private client: MongoDBConnectionClient, options: string | MongoDBConnectionOptions) {
-        super(options);
+    constructor(
+        private client: MongoDBConnectionClient,
+        conn: string | MongoDBConnectionOptions,
+        args?: BaileysAuthStateArgs,
+    ) {
+        super(conn, args);
 
         let collection = constants.DEFAULT_STORE_NAME;
-        if (typeof options !== "string") {
-            collection = options.collection || collection;
+        if (typeof conn === "string") {
+            collection = args?.collection || collection;
+        } else {
+            collection = conn.collection || collection;
         }
 
-        const db = typeof options !== "string" ? client.db(options.database) : client.db();
-        const conn = db.collection(collection);
-        this.connection = conn;
+        const db = typeof conn !== "string" ? client.db(conn.database) : client.db();
+        const connection = db.collection(collection);
+        this.connection = connection;
     }
 
-    static async init(options: string | MongoDBConnectionOptions) {
+    static async init(options: string | MongoDBConnectionOptions, args?: BaileysAuthStateArgs) {
         try {
             const mongo = await import("mongodb");
 
@@ -41,7 +48,7 @@ class MongoDBConnection extends ConnectionBase<BaileysAuthStateOptions> implemen
             }
 
             await client.connect();
-            return new MongoDBConnection(client, options);
+            return new MongoDBConnection(client, options, args);
         } catch (_err) {
             if (!constants.BAILEYSAUTH_TESTING) {
                 console.error("Error MongoDB Connection", _err);

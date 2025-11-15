@@ -2,6 +2,7 @@ import util from "@/Utils";
 import { constants } from "@/Lib/constants";
 import { ConnectionBase } from "@/Services/base";
 import type {
+    BaileysAuthStateArgs,
     BaileysAuthStateOptions,
     IConnectionBase,
     PostgreSQLBaseConnectionOptions,
@@ -10,26 +11,31 @@ import type {
 } from "@/Types";
 
 class PostgreSQLConnection extends ConnectionBase<BaileysAuthStateOptions> implements IConnectionBase {
-    constructor(private connection: PostgreSQLConnectionClient, options: BaileysAuthStateOptions) {
-        super(options);
+    constructor(
+        private connection: PostgreSQLConnectionClient,
+        conn: BaileysAuthStateOptions,
+        args?: BaileysAuthStateArgs,
+    ) {
+        super(conn, args);
     }
 
-    static async init(options: string | PostgreSQLConnectionOptions) {
+    static async init(conn: string | PostgreSQLConnectionOptions, args?: BaileysAuthStateArgs) {
         try {
             const pg = await import("pg");
 
             let client: PostgreSQLConnectionClient,
                 table = constants.DEFAULT_STORE_NAME;
 
-            if (typeof options === "string") {
-                client = new pg.Client({ connectionString: options });
+            if (typeof conn === "string") {
+                table = args?.table || table;
+                client = new pg.Client({ connectionString: conn });
             } else {
                 const connectionOptions = util.omit<PostgreSQLConnectionOptions, PostgreSQLBaseConnectionOptions>({
-                    ...options,
-                    ...options.args,
+                    ...conn,
+                    ...conn.args,
                 });
 
-                table = options.table || table;
+                table = conn.table || table;
                 client = new pg.Client(connectionOptions);
             }
 
@@ -46,7 +52,7 @@ class PostgreSQLConnection extends ConnectionBase<BaileysAuthStateOptions> imple
             await client.query(`CREATE INDEX IF NOT EXISTS idx_session ON "${table}" (session);`);
             await client.query(`CREATE INDEX IF NOT EXISTS idx_identifier ON "${table}" (identifier);`);
 
-            return new PostgreSQLConnection(client, options);
+            return new PostgreSQLConnection(client, conn, args);
         } catch (_err) {
             if (!constants.BAILEYSAUTH_TESTING) {
                 console.error("Error PostgreSQL Connection", _err);

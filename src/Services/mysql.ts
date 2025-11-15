@@ -7,27 +7,33 @@ import type {
     MySQLConnectionOptions,
     MySQLConnectionClient,
     MySQLBaseConnectionOptions,
+    BaileysAuthStateArgs,
 } from "@/Types";
 class MySQLConnection extends ConnectionBase<BaileysAuthStateOptions> implements IConnectionBase {
-    constructor(private connection: MySQLConnectionClient, options: BaileysAuthStateOptions) {
-        super(options);
+    constructor(
+        private connection: MySQLConnectionClient,
+        conn: BaileysAuthStateOptions,
+        args?: BaileysAuthStateArgs,
+    ) {
+        super(conn, args);
     }
 
-    static async init(options: string | MySQLConnectionOptions) {
+    static async init(conn: string | MySQLConnectionOptions, args?: BaileysAuthStateArgs) {
         try {
             const mysql = await import("mysql2/promise");
 
             let connection: MySQLConnectionClient,
                 table = constants.DEFAULT_STORE_NAME;
 
-            if (typeof options === "string") {
-                connection = await mysql.createConnection(options);
+            if (typeof conn === "string") {
+                table = args?.table || table;
+                connection = await mysql.createConnection(conn);
             } else {
                 const connectionOptions = util.omit<MySQLConnectionOptions, MySQLBaseConnectionOptions>({
-                    ...options,
-                    ...options.args,
+                    ...conn,
+                    ...conn.args,
                 });
-                table = options.table || table;
+                table = conn.table || table;
                 connection = await mysql.createConnection(connectionOptions);
             }
 
@@ -42,7 +48,7 @@ class MySQLConnection extends ConnectionBase<BaileysAuthStateOptions> implements
                 );
             `);
 
-            return new MySQLConnection(connection, options);
+            return new MySQLConnection(connection, conn, args);
         } catch (_err) {
             if (!constants.BAILEYSAUTH_TESTING) {
                 console.error("Error MySQL Connection", _err);

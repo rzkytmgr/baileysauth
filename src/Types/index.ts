@@ -31,13 +31,21 @@ export type ConnectionOptionsBase = {
     session: string;
 };
 
-export type SQLBasedConnectionOptionsBase = ConnectionOptionsBase & {
-    table: string;
-};
+export type SQLBasedConnectionOptionsBase = Partial<
+    ConnectionOptionsBase & {
+        table: string;
+    }
+>;
 
-export type NoSQLBasedConnectionOptionsBase = ConnectionOptionsBase & {
-    collection: string;
-};
+export type NoSQLBasedConnectionOptionsBase = Partial<
+    ConnectionOptionsBase & {
+        collection: string;
+    }
+>;
+
+export type BaileysAuthStateArgs = Partial<
+    ConnectionOptionsBase & NoSQLBasedConnectionOptionsBase & SQLBasedConnectionOptionsBase
+>;
 
 export type PostgreSQLConnectionClient = PostgeSQLClient;
 export type MySQLConnectionClient = MySQLConnection;
