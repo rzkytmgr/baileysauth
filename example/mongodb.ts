@@ -18,7 +18,11 @@ const initializer = async (session: string) => {
 
         /** uncomment below if you want to use connection string */
         // const mongoConnectionString = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}?authSource=admin`;
-        // const { saveCreds, state } = await useBaileysAuthState(mongoConnectionString);
+        // const { saveCreds, state } = await useBaileysAuthState(mongoConnectionString, {
+        //     /** v1.2.0 - you can custom table name and session name */
+        //     collection: APP_STORE,
+        //     session: APP_SESSION
+        // });
 
         const { saveCreds, state } = await useBaileysAuthState({
             dialect: "mongodb",

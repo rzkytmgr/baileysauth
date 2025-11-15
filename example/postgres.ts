@@ -18,7 +18,11 @@ const initializer = async (session: string) => {
 
         /** uncomment below if you want to use connection string */
         // const postgresConnectionString = `postgres://${PG_USER}:${PG_PASSWORD}@${PG_HOST}:${PG_PORT}/${PG_DATABASE}`;
-        // const { saveCreds, state } = await useBaileysAuthState(postgresConnectionString);
+        // const { saveCreds, state } = await useBaileysAuthState(postgresConnectionString, {
+        //     /** v1.2.0 - you can custom table name and session name */
+        //     table: APP_STORE,
+        //     session: APP_SESSION
+        // });
 
         const { saveCreds, state } = await useBaileysAuthState({
             dialect: "pg",

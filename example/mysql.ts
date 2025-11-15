@@ -18,7 +18,11 @@ const initializer = async (session: string) => {
 
         /** uncomment below if you want to use connection string */
         // const mysqlStringConnection = `mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}`;
-        // const { saveCreds, state } = await useBaileysAuthState(mysqlStringConnection);
+        // const { saveCreds, state } = await useBaileysAuthState(mysqlStringConnection, {
+        //     /** v1.2.0 - you can custom table name and session name */
+        //     table: APP_STORE,
+        //     session: APP_SESSION
+        // });
 
         const { saveCreds, state } = await useBaileysAuthState({
             dialect: "mysql",
