@@ -52,7 +52,7 @@
     "qrcode": "^1.5.4",
     "resolve-tspaths": "^0.8.23",
     "tsx": "^4.20.3",
-    "typescript": "^5.9.2",
+    "typescript": "^6.0.3",
     "typescript-eslint": "^8.39.0"
   },
   "engines": {
