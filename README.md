@@ -3,8 +3,8 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/baileys-v7.0.0--rc.6-x?labelColor=%230bd09f&color=%23f2f5f4">
-  <img src="https://img.shields.io/npm/v/baileysauth?label=%20baileysauth&labelColor=%23cdb34c&color=%23f2f5f4">
+  <img src="https://img.shields.io/github/v/release/whiskeysockets/Baileys?label=baileys&labelColor=0bd09f&color=f2f5f4">
+  <img src="https://img.shields.io/github/v/release/rzkytmgr/baileysauth?label=baileys&labelColor=cdb34c&color=f2f5f4">
   <br>
   <img src="https://img.shields.io/npm/unpacked-size/baileysauth?label=size">
   <img src="https://img.shields.io/github/actions/workflow/status/rzkytmgr/baileysauth/matrix-node-test.yaml">
