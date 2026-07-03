@@ -88,7 +88,7 @@ class PostgreSQLConnection extends ConnectionBase<BaileysAuthStateOptions> imple
 
     public async wipe() {
         await this.connection.query(
-            `DELETE FROM "${this.table}" WHERE session = ?`,
+            `DELETE FROM "${this.table}" WHERE session = $1`,
             [this.session],
         );
     }
