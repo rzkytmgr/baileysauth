@@ -4,7 +4,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/github/v/release/whiskeysockets/Baileys?label=baileys&labelColor=0bd09f&color=f2f5f4">
-  <img src="https://img.shields.io/github/v/release/rzkytmgr/baileysauth?label=baileys&labelColor=cdb34c&color=f2f5f4">
+  <img src="https://img.shields.io/github/v/release/rzkytmgr/baileysauth?label=baileysauth&labelColor=cdb34c&color=f2f5f4">
   <br>
   <img src="https://img.shields.io/npm/unpacked-size/baileysauth?label=size">
   <img src="https://img.shields.io/github/actions/workflow/status/rzkytmgr/baileysauth/matrix-node-test.yaml">
