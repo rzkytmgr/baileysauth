@@ -6,7 +6,7 @@ services:
             context: .
             dockerfile: Dockerfile
             args:
-                NODE_VERSION: ${NODE_VERSION:-20}
+                NODE_VERSION: ${NODE_VERSION:-24}
         depends_on:
             mysql:
                 condition: service_healthy
@@ -34,13 +34,15 @@ services:
         networks:
             - bauthtest
     mysql:
-        image: mysql
+        image: mysql:8
         environment:
             MYSQL_ROOT_PASSWORD: password
         healthcheck:
-            test: ["CMD", "mysqladmin", "ping", "-ppassword"]
+            test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-ppassword"]
             interval: 3s
+            timeout: 5s
             retries: 10
+            start_period: 10s
         networks:
             - bauthtest
     pg:
