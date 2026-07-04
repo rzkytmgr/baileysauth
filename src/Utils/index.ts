@@ -1,6 +1,6 @@
 /* @ts-ignore */
-import * as libsignal from "libsignal";
-import base64 from "@protobufjs/base64";
+import curve from "libsignal/src/curve";
+import protobuf from "protobufjs";
 import { randomBytes } from "crypto";
 import type {
     AuthenticationCreds,
@@ -40,7 +40,7 @@ const generateSignalPubKey = (pubKey: Uint8Array | Buffer) =>
     ]);
 
 const generateKeyPair = (): KeyPair => {
-    const { pubKey, privKey } = libsignal.curve.generateKeyPair();
+    const { pubKey, privKey } = curve.generateKeyPair();
     const generatedKeyPair = {
         private: Buffer.from(privKey),
         public: Buffer.from((pubKey as Uint8Array).slice(1)),
@@ -48,7 +48,7 @@ const generateKeyPair = (): KeyPair => {
     return generatedKeyPair;
 };
 
-const signKey = (privateKey: Uint8Array, buf: Uint8Array) => libsignal.curve.calculateSignature(privateKey, buf);
+const signKey = (privateKey: Uint8Array, buf: Uint8Array) => curve.calculateSignature(privateKey, buf);
 
 const signedKeyPair = (identityKeyPair: KeyPair, keyId: number) => {
     const preKey = generateKeyPair();
@@ -82,6 +82,7 @@ const initializeAuthenticationCredentials = (): AuthenticationCreds => {
 
 const fromObject = (object: AppDataSync) => {
     const message: AppDataSync = object || {};
+    const { base64 } = protobuf.util;
 
     if (object.keyData !== null) {
         if (typeof object.keyData === "string") {
