@@ -38,28 +38,28 @@
   "license": "MIT",
   "packageManager": "pnpm@10.14.0",
   "devDependencies": {
-    "@eslint/js": "^9.32.0",
+    "@eslint/js": "^10.0.1",
     "@hapi/boom": "^10.0.1",
-    "@swc/cli": "^0.7.8",
+    "@swc/cli": "^0.8.1",
     "@swc/core": "^1.14.0",
-    "@types/node": "^24.2.0",
+    "@types/node": "^26.1.2",
     "@types/pg": "^8.15.5",
     "@types/qrcode": "^1.5.5",
-    "baileys": "7.0.0-rc13",
-    "dprint": "^0.54.0",
+    "baileys": "7.0.0-rc14",
+    "dprint": "^0.55.2",
     "eslint": "^9.32.0",
     "husky": "^9.1.7",
     "qrcode": "^1.5.4",
     "resolve-tspaths": "^0.8.23",
     "tsx": "^4.20.3",
-    "typescript": "^5.9.2",
+    "typescript": "^7.0.2",
     "typescript-eslint": "^8.39.0"
   },
   "engines": {
     "node": ">=22"
   },
   "dependencies": {
-    "protobufjs": "^7.5.6",
+    "protobufjs": "^8.7.1",
     "libsignal": "^6.0.0",
     "long": "^5.3.2"
   },
